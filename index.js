@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId, AggregationCursor } = require('mongodb');
 require('dotenv').config();
 
 const app = express();
@@ -29,6 +29,14 @@ async function run() {
             const services = await cursor.toArray();
             res.send(services);
         });
+        app.get('/serviceLimit', async (req, res) => {
+            const query = {};
+            const cursor = serviceCollection.find(query);
+            const serviceLimit = await cursor.limit(3).toArray();
+            res.send(serviceLimit);
+        });
+
+
         app.get('/services/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) };
@@ -61,7 +69,7 @@ async function run() {
 
         app.delete('/reviews/:id', async (req, res) => {
             const id = req.params.id;
-            const query = { _id: ObjectId(id) };
+            const query = { _id: ObjectId(_id) };
             const result = await reviewCollection.deleteOne(query);
             res.send(result);
         })
