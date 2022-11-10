@@ -98,7 +98,12 @@ async function run() {
             const result = await reviewCollection.deleteOne(query);
             res.send(result);
         })
-
+        // add service api
+        app.post('/addService', async (req, res) => {
+            const addService = req.body;
+            const result = await serviceCollection.insertOne(addService);
+            res.send(result);
+        });
 
     }
     finally {
